@@ -247,3 +247,23 @@ class FootballNewsFunctionalTest(LiveServerTestCase):
         my_button = self.browser.find_element(By.PARTIAL_LINK_TEXT, "My Articles")
         my_button.click()
         self.assertIn("My Test News", self.browser.page_source)
+        
+        
+        def test_event_detail_ended_future_event(self):
+        response = self.client.get(reverse('event:event_detail', args=[self.future_event.id]))
+        self.assertFalse(response.context['has_ended'])
+        
+        formTest
+        
+            def test_clean_deskripsi_prevents_xss(self):
+        form_data = {
+            'judul': 'Test',
+            'deskripsi': '<script>alert("XSS")</script>Safe description',
+            'date': '12 Juli 2025 15.00',
+            'lokasi': 'Test',
+            'kategori': 'basket'
+        }
+        form = EventForm(data=form_data)
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['deskripsi'], 'Safe description')
+        self.assertNotIn('<script>', form.cleaned_data['deskripsi'])
